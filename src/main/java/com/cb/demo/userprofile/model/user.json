@@ -1,0 +1,35 @@
+// tag::code[]
+{
+  "_class" : "com.cb.demo.userProfile.model.UserEntity",
+  "firstName": "Pascal",
+  "lastName": "Gasp",
+  "enabled": true,
+  "countryCode": "DE",
+  "username": "someUser",
+  "password": "letMeIn",
+  "securityRoles": ["USER", "ADMIN"],
+  "preferences": [
+    {
+      "name": "lang",
+      "value": "fr"
+    },
+    {
+      "name": "currency",
+      "value": "EUR"
+    },
+
+  ],
+  "addresses": [
+    {
+      "name": "Home",
+      "street": "Rue du 4 Septembre",
+      "number": "7",
+      "zipCode": "92170",
+      "city": "Vanves",
+      "state": "IDF",
+      "countryCode": "FR"
+    }
+  ]
+}
+
+// end::code[]

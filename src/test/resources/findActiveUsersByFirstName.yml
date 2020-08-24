@@ -1,0 +1,10 @@
+execution:
+  - concurrency: 100
+    ramp-up: 30s
+    hold-for: 2m
+    scenario: findActiveUsersByFirstName
+
+scenarios:
+  findActiveUsersByFirstName:
+    requests:
+      - http://localhost:8080/findActiveUsersByFirstName?firstName=Pascal&countryCode=FR&limit=10&offset=0
