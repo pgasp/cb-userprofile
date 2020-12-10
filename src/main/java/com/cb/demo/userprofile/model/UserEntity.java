@@ -1,20 +1,27 @@
 package com.cb.demo.userprofile.model;
 
-import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.couchbase.core.mapping.Document;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.List;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.TypeAlias;
+import org.springframework.data.couchbase.core.index.CompositeQueryIndex;
+import org.springframework.data.couchbase.core.index.QueryIndexed;
+import org.springframework.data.couchbase.core.mapping.Document;
+
+import lombok.Data;
 
 @Data
 @Document
+@TypeAlias("user")
+@CompositeQueryIndex(fields = {"firstName","lastName asc" })
 public class UserEntity {
     @Id
-    private String id;
+     private String id;
     @NotNull
-    private String firstName;
+    @QueryIndexed private String firstName;
     private String middleName;
     private String lastName;
     private boolean enabled;

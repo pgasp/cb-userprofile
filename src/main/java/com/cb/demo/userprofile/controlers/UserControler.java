@@ -1,9 +1,10 @@
 package com.cb.demo.userprofile.controlers;
 
 import com.cb.demo.userprofile.model.UserEntity;
-import com.cb.demo.userprofile.repository.UserEntityRepository;
+import com.cb.demo.userprofile.services.UserService;
+import com.cb.demo.userprofile.services.vo.SimpleUserVO;
+import com.cb.demo.userprofile.services.vo.UserFoundImVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
@@ -14,7 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @RestController
 public class UserControler {
     @Autowired
-    private UserEntityRepository userEntityRepository;
+    private UserService userService;
 
 
     @PostConstruct
@@ -29,7 +30,7 @@ public class UserControler {
                     "Davis", "Rodriguez", "Martinez", "Hernandez", "Lopez",  "Gonzalez" };
             String[] country = {"US", "FR", "GB", "ES", "JP",  };
 
-            for(int i=0; i < 300;i++) {
+            for(int i=0; i < 10000;i++) {
 
                 if(i%100 == 0) {
                     System.out.println("----------- i = "+i);
@@ -43,20 +44,35 @@ public class UserControler {
                 userEntity.setUsername("user"+i);
                 userEntity.setPassword("secret");
                 userEntity.setEnabled(true);
-                userEntityRepository.save(userEntity);
+                userService.addUser(userEntity);
 
             }
         }
     }
 
+
     @GetMapping("/findByUsername")
     public UserEntity findByUsername(@RequestParam("username") String userName) {
-        return userEntityRepository.findByUsername(userName);
+        return userService.findByUsername(userName);
+    }
+
+    @GetMapping("/findById")
+    public UserEntity findById(@RequestParam("Id") String id) {
+        return userService.getUser(id);
     }
 
     @PostMapping("/save")
     public UserEntity save(@Valid @RequestBody UserEntity user) {
-        return userEntityRepository.save(user);
+        return userService.addUser(user);
+    }
+
+
+    @GetMapping(value = "/listActiveUsers")
+    public List<SimpleUserVO> listActiveUsers(@RequestParam("firstName") String firstName,
+                                                         @RequestParam("countryCode") String countryCode,
+                                                         @RequestParam("limit") int limit,
+                                                         @RequestParam("offset") int offset) {
+        return userService.listActiveUsers(firstName, true, countryCode, limit, offset);
     }
 
     @GetMapping(value = "/findActiveUsersByFirstName")
@@ -64,8 +80,21 @@ public class UserControler {
                                                        @RequestParam("countryCode") String countryCode,
                                                        @RequestParam("limit") int limit,
                                                        @RequestParam("offset") int offset) {
-        return userEntityRepository.findActiveUsersByFirstName(firstName, true, countryCode, limit, offset);
+        return userService.findActiveUsersByFirstName(firstName, countryCode, limit, offset);
     }
 
-
+    @GetMapping(value = "/findActiveUsersByFirstNameFTS")
+    public List<SimpleUserVO> findActiveUsersByFirstNameFTS(@RequestParam("firstName") String firstName,
+                                                       @RequestParam("countryCode") String countryCode,
+                                                       @RequestParam("limit") int limit,
+                                                       @RequestParam("offset") int offset) {
+        return userService.ftsListActiveUsers(firstName, true, countryCode, limit, offset);
+    }
+    @GetMapping(value = "/scoreActiveUsersByFirstName")
+    public List<UserFoundImVO> scoreListActiveUsers(@RequestParam("firstName") String firstName,
+                                                    @RequestParam("countryCode") String countryCode,
+                                                    @RequestParam("limit") int limit,
+                                                    @RequestParam("offset") int offset) {
+        return userService.scoreListActiveUsers(firstName, true, countryCode, limit, offset);
+    }
 }

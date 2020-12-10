@@ -1,18 +1,15 @@
 package com.cb.demo.userprofile.repository;
 
-import com.cb.demo.userprofile.model.UserEntity;
-import lombok.NoArgsConstructor;
-import org.springframework.data.couchbase.core.query.N1qlPrimaryIndexed;
-import org.springframework.data.couchbase.core.query.N1qlSecondaryIndexed;
-import org.springframework.data.couchbase.core.query.Query;
-import org.springframework.data.couchbase.repository.CouchbasePagingAndSortingRepository;
-import org.springframework.data.couchbase.repository.CouchbaseRepository;
-
 import java.util.List;
 
-@N1qlPrimaryIndexed
-@N1qlSecondaryIndexed(indexName = "userEntity")
-public interface UserEntityRepository extends CouchbasePagingAndSortingRepository<UserEntity,String> {
+import org.springframework.data.couchbase.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+import com.cb.demo.userprofile.model.UserEntity;
+
+@Repository
+public interface UserEntityRepository extends CrudRepository<UserEntity,String> {
 
     UserEntity findByUsername(String username);
 
